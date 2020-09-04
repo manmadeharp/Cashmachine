@@ -1,0 +1,380 @@
+let accountbalance = 1000;
+let TruePin = 1234;
+// let EnteredPin = 134;
+let maxwithdraw = 250;
+const maxdeposit = 250;
+let totaltransactions = [""];
+const gbptoeuro = 1.5;
+const eurotogbp = 1/1.5;
+let exchange = () =>{
+    readline.question("what would you like to exchange eurotogbp, gpbtoeuro", changechoice => {
+        switch (changechoice) {
+            case "eurotogbp":
+                readline.question("how many euros would you like to exchange", choice5 =>{
+                    accountbalance -= Number(choice5)*eurotogbp
+                    totaltransactions.push(`you have exchange ${choice5*eurotogbp} euros to gbp you balance is ${accountbalance}`)
+                    console.log(`you have ${accountbalance} in your balance`)
+                })
+                
+                break;
+
+            case "gbptoeuro":
+                readline.question("how many gbp would you like to exchange", choice6 => {
+                    accountbalance -= Number(choice6*gbptoeuro);
+                    totaltransactions.push(`you have exchange ${choice6*gbptoeuro} euros to gbp you balance is ${accountbalance}`);
+                    console.log(`you have ${accountbalance} in your balance`)
+                    
+
+
+                })
+                break;
+            default:
+                break;
+        }
+        
+    })
+}
+let transactions = () =>{
+    console.log(totaltransactions);
+    readline.question("what type of transaction would you like to make deposit withdraw or change pin or check transactions or exchange ", choice4 =>{
+        switch (choice4) {
+            case `deposit`:
+
+                deposit()
+                break;
+            case `withdraw`:
+                withdraw()
+                break;
+            case `changepin`:
+                changepin()
+                break;
+            case "check transactions":
+                transactions()
+                break;
+            case "exchange":
+                exchange()
+                break;
+
+        
+            default:
+                ("please enter a choice shutting down for now")
+                break;
+        }
+    })
+
+}
+let changepin = () =>{
+    readline.question(`hat ould you like your new pin to be`, newpin =>{
+        TruePin = newpin
+        console.log(`your new pin is ${TruePin}`)
+        readline.question(`would you like to make another transaction yes or no`, choice1 => {
+            switch (choice1) {
+                case `yes`:
+                    readline.question(`what type of transaction would you like to make deposit withdraw or change pin or check transactions or exchange`, choice2 =>{
+                        switch (choice2) {
+                            case `deposit`:
+                                deposit()
+                                break;
+                            case `withdraw`:
+                                withdraw()
+                                break;
+                            case `changepin`:
+                                changepin()
+                                break;
+                            case "check transactions":
+                                transactions()
+                                break;
+                                case "exchange":
+                                    exchange()
+                                    break;
+
+                        
+                            default:
+                                ("please enter a choice shutting down for now")
+                                break;
+                        }
+
+                    })
+                    break;
+                case `no`:
+                    console.log(`ok shutting down`)
+            
+                default:
+                    break;
+            }
+
+        })
+    })
+}
+let withdraw = () => {
+    readline.question("how much money would you like to withdraw below 250",withdrawamount => {
+        switch (true) {
+            case withdrawamount > 250:
+                console.log("I'm sorry you cannot take out more than 250 please try again")
+                withdraw()
+                break;
+            case withdrawamount < 250:
+                maxwithdraw -=withdrawamount;
+                if (maxwithdraw<0)
+                {
+                    console.log(`im sorry but you have maxed out your withdrawal`)
+                    readline.question("would you like to make another transaction yes or no", choice3 =>{
+                        switch (choice3) {
+                            case "yes":
+                                readline.question("please type deposit or changepin you can no longe withdraw", withdrawordeposit =>{
+                                    switch (withdrawordeposit) {
+                                        case "deposit":
+                                            deposit()
+                                            
+                                            break;
+                                        case "change pin":
+                                            changepin()
+                                            break;
+                                        case "check transactions":
+                                            transactions()
+                                            break;
+                                        default:
+                                            ("that wasnt a choice thank you for now")
+                                            break;
+                                            case "exchange":
+                                                exchange()
+                                                break;
+                                    }
+                                })
+                                break;
+                            case "no":
+                                console.log("thank you for your time")
+                        
+                            default:
+                                console.log("please enter a valid choice shutting down for now")
+                                break;
+                        }
+                    })
+
+                }
+                else{
+
+                
+                console.log(`Thank you your new balance is ${accountbalance-=withdrawamount}`)
+                totaltransactions.push(`you withdrew ${withdrawamount} from you bank account leaving ${accountbalance}`)
+
+                readline.question("is there anything else you'd like to do today please type yes or no", choice =>{
+                    switch (choice) {
+                        case "yes":
+                            readline.question("please type deposit or withdraw or change pin or check transactions or exchange", withdrawordeposit =>{
+                                switch (withdrawordeposit) {
+                                    case "deposit":
+                                        deposit()
+                                        
+                                        break;
+                                    case "withdraw":
+                                        withdraw()
+                                        break;
+                                    case "change pin":
+                                        changepin()
+                                        break;
+                                    case "check transactions":
+                                        transactions()
+                                        break;
+                                        case "exchange":
+                                            exchange()
+                                            break;
+                                
+                                    default:
+                                        ("that wasnt a choice thank you for now")
+                                        break;
+                                }
+                            })
+                            break;
+                        case "no":
+                            console.log("thank you for you time")
+
+                            break;
+                    
+                        default:
+                            console.log("that wasnt a choice thank you for now")
+                            break;
+                    }
+                
+                })
+            }
+                break;
+            default:
+                console.log("please enter a number");
+                withdraw()
+                break;
+    }
+        })
+}
+
+let deposit = () => {
+    readline.question("how much would you like to deposit below 250", depositamount =>{
+        switch (true) {
+            case depositamount > 250:
+            console.log(`please enter an amount below 250`)
+            deposit()
+            break;
+            case depositamount < 250:
+                accountbalance += Number(depositamount);
+                console.log(`you now have ${accountbalance}`);
+                totaltransactions.push(`you deposited ${depositamount} leaving you with ${accountbalance}`);
+                readline.question("is there anything else you'd like to do today please type yes or no", choice =>{
+                    switch (choice) {
+                        case "yes":
+                            readline.question("please type deposit, withdraw or change pin or check transactions or exchange ", withdrawordeposit =>{
+                                switch (withdrawordeposit) {
+                                    case "deposit":
+                                        deposit()
+                                        break;
+                                    case "withdraw":
+                                        withdraw()
+                                        break;
+                                    case "change pin":
+                                        changepin()
+                                        break;
+                                    case "check transactions":
+                                        transactions()
+                                        break;
+                                    default:
+                                        ("that wasnt a choice thank you for now")
+                                        break;
+                                    case "exchange":
+                                        exchange()
+                                        break;
+                                }
+                            })
+                            break;
+                        case "no":
+                            console.log("thank you for you time")
+                            break;
+                        default:
+                            console.log("that wasnt a choice thank you for now")
+                            break;
+                    }
+        })
+        break;
+        
+        default:
+            console.log(`please give a valid number`)
+            deposit()
+            break;
+    }
+})
+}
+let i = 0;
+let pincheck = (TruePin, EnteredPin) => {
+        switch (true) {
+            case TruePin == EnteredPin:
+                console.log("entered pin is correct")
+                i = 4;
+                readline.question("would you like to deposit or withdraw or change pin or check transactions or exchange", depositwithdraw =>{
+                    switch (depositwithdraw) {
+                        case "withdraw":
+                            withdraw()
+                            break;
+                        case "deposit":
+                            deposit()
+                            break;
+                        case "change pin":
+                            changepin()
+                            break;
+                        case "check transactions":
+                            transactions()
+                            break;
+                        case "exchange":
+                            exchange()
+                            break;
+                        default:
+                            console.log("thats not a answer bye for now")
+                            break;
+                    }
+                })
+                break;
+            case i != 0:
+                console.log(`you have ${3-i} tries remaining`)
+                readline.question("please re enter your pin", EnteredPin => {
+                    switch (true) {
+                        case TruePin == EnteredPin:
+                        console.log("entered pin is correct")
+                        i = 4;
+                        readline.question("would you like to deposit or withdraw or change pin or check transactions or exchange", depositwithdraw =>{
+                            switch (depositwithdraw) {
+                                case "withdraw":
+                                    withdraw()
+                                    break;
+                                case "deposit":
+                                    deposit()
+                                    break;
+                                case "change pin":
+                                    changepin()
+                                    break;
+                                case "check transactions":
+                                    transactions()
+                                    break;
+                                case "exchange":
+                                    exchange()
+                                    break;
+                                default:
+                                    console.log("thats not a answer bye for now")
+                                    break;
+                            }
+                        })
+                        break;
+                        default:
+                            i += 1
+                            console.log(`you have ${3-i} tries remaining`)
+                            readline.question("please re enter your pin", EnteredPin => {
+                                switch (true) {
+                                    case EnteredPin == TruePin:
+                                        console.log("entered pin is correct")
+                                        i = 4;
+                                        readline.question("would you like to deposit or withdraw or change pin or check transactions or exchange", depositwithdraw =>{
+                                            switch (depositwithdraw) {
+                                                case "withdraw":
+                                                    withdraw()
+                                                    break;
+                                                case "deposit":
+                                                    deposit()
+                                                    break;
+                                                case "change pin":
+                                                    changepin()
+                                                    break;
+                                                case "check transactions":
+                                                    transactions()
+                                                    break;
+                                                case "exchange":
+                                                    exchange()
+                                                    break;
+                                                default:
+                                                    console.log("thats not a answer bye for now")
+                                                    break;
+                                            }
+                                        })
+                                        break;
+                                
+                                    default:
+                                        console.log("im sorry but you have been locked out")
+                                        break;
+                                }
+                            })
+
+                        
+                    }
+                
+                })
+                break;
+            default:
+                i += 1;
+                pincheck(TruePin, EnteredPin)
+                break;
+        }
+    
+}
+
+let pinenter = ()=>{
+    readline.question("what is your pin", EnteredPin => {
+        pincheck(TruePin, EnteredPin)
+    
+    })
+}
+pinenter()
